@@ -8,16 +8,21 @@ const LoginPage = () => {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const handleChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    setFormData((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const { data } = await API.post('/account/login', formData);
-      // Save the token from response (assuming it returns { token: "..." })
-      localStorage.setItem('token', data.token);
-      navigate('/chat');
+
+      if (data.success && data.data?.token) {
+        localStorage.setItem('token', data.data.token);
+        navigate('/chat');
+      } else {
+        setError(data.message || 'Login failed.');
+      }
     } catch (err) {
       setError('Login failed. Please check your credentials.');
     }
@@ -56,7 +61,10 @@ const LoginPage = () => {
           <button type="submit" className="btn btn-primary w-100">Login</button>
         </form>
         <p className="mt-3 text-center">
-          Don't have an account? <Link to="/register">Register here</Link>
+          Don't have an account?{" "}
+          <Link to="/register" className="text-primary">
+            Register here
+          </Link>
         </p>
       </div>
     </div>

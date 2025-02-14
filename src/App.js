@@ -1,4 +1,3 @@
-// src/App.js
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import LoginPage from './pages/LoginPage';
@@ -20,7 +19,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-        {/* If route not found, redirect to /chat (or /login if not authenticated) */}
+        {}
         <Route path="*" element={<Navigate to="/chat" replace />} />
       </Routes>
     </Router>
